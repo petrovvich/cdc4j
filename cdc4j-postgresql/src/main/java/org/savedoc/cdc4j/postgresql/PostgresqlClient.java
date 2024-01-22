@@ -78,8 +78,9 @@ public final class PostgresqlClient implements CdcClient {
         try {
             final var event = messageQueue.peek();
             if (event != null) {
-                pgReplicationStream.setAppliedLSN(event.getLastLSN());
-                pgReplicationStream.setFlushedLSN(event.getLastLSN());
+                pgReplicationStream.setAppliedLSN(pgReplicationStream.getLastReceiveLSN());
+                pgReplicationStream.setFlushedLSN(pgReplicationStream.getLastReceiveLSN());
+                pgReplicationStream.forceUpdateStatus();
                 return Optional.of(messageQueue.poll().getEvent());
             }
         } catch (Exception e) {
@@ -263,7 +264,7 @@ public final class PostgresqlClient implements CdcClient {
         executorService
                 .scheduleAtFixedRate(
                         () -> {
-                            while (running.get()) {
+                            if (running.get()) {
                                 try {
                                     final var pending = pgReplicationStream.readPending();
                                     if (pending != null) {
@@ -275,9 +276,8 @@ public final class PostgresqlClient implements CdcClient {
                                 } catch (Exception e) {
                                     log.error("Can not read event", e);
                                 }
-
                             }
-                        }, 0, 1000, TimeUnit.MILLISECONDS);
+                        }, 0, 250, TimeUnit.MILLISECONDS);
     }
 
     public static final class Builder {
