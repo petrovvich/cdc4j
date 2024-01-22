@@ -117,12 +117,8 @@ public final class PostgresqlClient implements CdcClient {
                 }
             } else {
                 final var stmtCreate = connection.prepareStatement("create publication " + PUBLICATION_NAME);
-                final var createResult = stmtCreate.executeQuery();
-                if (createResult.next()) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Publication {} created", replicationSlotName);
-                    }
-                }
+                stmtCreate.executeUpdate();
+                log.debug("Publication {} created", replicationSlotName);
             }
         } catch (Exception e) {
             log.error("Can not initialize connection", e);
