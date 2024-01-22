@@ -207,7 +207,7 @@ public final class PostgresqlClient implements CdcClient {
     private void updateReplicaIdentityForAllTables() {
         for (PublicationTable pt : tables) {
             try (final var stmt = connection.prepareStatement("ALTER TABLE " + pt.getTableSchema() + "." + pt.getTableName() + " REPLICA IDENTITY full")) {
-                stmt.executeQuery();
+                stmt.executeUpdate();
             } catch (Exception exception) {
                 log.error("Can not update replica identity", exception);
             }
