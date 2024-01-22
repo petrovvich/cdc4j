@@ -1,0 +1,98 @@
+:toc: auto
+:stylesheet: spring.css
+:doctype: book
+:toc-title: Table of contents
+toc::[]
+
+= Change data capture library for Java
+
+== Purpose
+
+This library provides mechanism for reading change data capture events from various databases without hassle.
+
+Currently, supports only PostgreSQL.
+
+== Requirements
+
+. java 11+
+. PostgreSQL 10+
+
+== Supported versions and features
+
+||||
+
+== Example usage
+
+To start using this library you should have configured CdcClient class implementation.
+
+=== PostgreSQL
+
+. Add following dependency to *pom.xml*:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.savedoc.cdc4j.postgresql</groupId>
+    <artifactId>cdc4j-postgresql</artifactId>
+    <version>0.0.2</version>
+</dependency>
+----
+
+or to *build.gradle*
+
+[source,groovy]
+----
+implementation group: 'org.savedoc.cdc4j.postgresql', name: 'cdc4j-postgresql', version: '0.0.2'
+----
+
+[start=2]
+. Configure PostgresqlClient to accept events from a database:
+
+[source,java]
+----
+final PostgresqlClient client = PostgresqlClient.builder()
+        .withEvents(Set.of(CdcEventType.INSERT, CdcEventType.DELETE, CdcEventType.UPDATE))
+        .withDatabaseName("my_database_name")
+        .withPort("15432")
+        .withHost("localhost")
+        .withUsername("postgres")
+        .withPassword("postgres")
+        .withTables(List.of(PublicationTable.builder()
+                .withTableName("my_table_name")
+                .withTableSchema("public")
+                .build()))
+        .withReplicationSlotName("my_replication_slot")
+        .build();
+----
+
+NOTE: If no events are specified then all events will be used.
+
+NOTE: All PublicationTable objects should have table schema.
+
+[start=3]
+. Start client before use:
+
+[source,java]
+----
+final PostgresqlClient client = ....;
+client.start();
+----
+
+NOTE: Method *start()* isn't destructible.
+Events are reading from a replication stream and store in an internal queue before committing offset.
+
+[start=4]
+. Read and process events from a database:
+
+[source,java]
+----
+final PostgresqlClient client = ....;
+client.start();
+final CdcEvent event = client.read();
+log.info("Event is {}", event);
+----
+
+NOTE: Method *read()* is destructible.
+It means after call this read() event will be deleted from an internal event queue and offset will be committed to replication stream.
+
+== Known issues
