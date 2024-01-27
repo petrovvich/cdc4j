@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.14-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -33,13 +33,13 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git://github.com:save-doc/cdc4j.git</connection>
-        <developerConnection>scm:git:ssh://github.com:save-doc/cdc4j.git</developerConnection>
-        <url>https://github.com/save-doc/cdc4j/tree/master</url>
+        <connection>scm:git:git://github.com:petrovvich/cdc4j.git</connection>
+        <developerConnection>scm:git:ssh://github.com:petrovvich/cdc4j.git</developerConnection>
+        <url>https://github.com/petrovvich/cdc4j/tree/master</url>
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.5</cdc4j.version>
+        <cdc4j.version>0.0.14-SNAPSHOT</cdc4j.version>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
@@ -174,5 +174,4 @@
             </distributionManagement>
         </profile>
     </profiles>
-
 </project>
