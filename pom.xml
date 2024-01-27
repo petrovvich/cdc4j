@@ -37,7 +37,6 @@
         <developerConnection>scm:git:ssh://github.com:save-doc/cdc4j.git</developerConnection>
         <url>https://github.com/save-doc/cdc4j/tree/master</url>
     </scm>
-    x
 
     <properties>
         <cdc4j.version>0.0.1</cdc4j.version>
