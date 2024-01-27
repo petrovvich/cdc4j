@@ -11,21 +11,29 @@ toc::[]
 This library provides mechanism for reading change data capture events from various databases without hassle.
 
 Currently, supports only PostgreSQL.
+Later will be added MySQL, Oracle, SQL Server.
 
-== Requirements
+== PostgreSQL
+
+=== Requirements
 
 . java 11+
 . PostgreSQL 10+
+. Enabled logical replication (*wal_level* should be set to *logical*)
 
-== Supported versions and features
+=== Supported versions and features
 
-||||
+[cols="^.^,^.^,^.^,^.^,^.^,^.^,^.^"]
+|===
+.2+h|Version 2+h|Extension 4+h|Events
+1+h|pgoutput 1+h|wal2json 1+h|Create 1+h|Delete 1+h|Insert 1+h|Truncate
+|0.0.1|Yes|No|Yes|Yes|Yes|No
+|0.0.2|Yes|No|Yes|Yes|Yes|No
+|===
 
-== Example usage
+=== Example usage
 
 To start using this library you should have configured CdcClient class implementation.
-
-=== PostgreSQL
 
 . Add following dependency to *pom.xml*:
 
@@ -93,6 +101,26 @@ log.info("Event is {}", event);
 ----
 
 NOTE: Method *read()* is destructible.
-It means after call this read() event will be deleted from an internal event queue and offset will be committed to replication stream.
+It means after call read() event will be deleted from an internal event queue and offset will be committed to replication stream.
 
-== Known issues
+=== Known issues
+
+TBD
+
+== MySQL
+
+=== Requirements
+
+TBD
+
+=== Supported versions and features
+
+TBD
+
+=== Example usage
+
+TBD
+
+=== Known issues
+
+TBD
