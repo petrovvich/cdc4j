@@ -21,3 +21,16 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+  publish:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Publish package
+        run: mvn --batch-mode -DuseGitHubPackages=true deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
