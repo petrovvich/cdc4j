@@ -78,8 +78,9 @@ public final class PostgresqlClient implements CdcClient {
         try {
             final var event = messageQueue.peek();
             if (event != null) {
-                pgReplicationStream.setAppliedLSN(event.getLastLSN());
-                pgReplicationStream.setFlushedLSN(event.getLastLSN());
+                pgReplicationStream.setAppliedLSN(pgReplicationStream.getLastReceiveLSN());
+                pgReplicationStream.setFlushedLSN(pgReplicationStream.getLastReceiveLSN());
+                pgReplicationStream.forceUpdateStatus();
                 return Optional.of(messageQueue.poll().getEvent());
             }
         } catch (Exception e) {
@@ -117,12 +118,8 @@ public final class PostgresqlClient implements CdcClient {
                 }
             } else {
                 final var stmtCreate = connection.prepareStatement("create publication " + PUBLICATION_NAME);
-                final var createResult = stmtCreate.executeQuery();
-                if (createResult.next()) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Publication {} created", replicationSlotName);
-                    }
-                }
+                stmtCreate.executeUpdate();
+                log.debug("Publication {} created", replicationSlotName);
             }
         } catch (Exception e) {
             log.error("Can not initialize connection", e);
@@ -211,7 +208,7 @@ public final class PostgresqlClient implements CdcClient {
     private void updateReplicaIdentityForAllTables() {
         for (PublicationTable pt : tables) {
             try (final var stmt = connection.prepareStatement("ALTER TABLE " + pt.getTableSchema() + "." + pt.getTableName() + " REPLICA IDENTITY full")) {
-                stmt.executeQuery();
+                stmt.executeUpdate();
             } catch (Exception exception) {
                 log.error("Can not update replica identity", exception);
             }
@@ -267,7 +264,7 @@ public final class PostgresqlClient implements CdcClient {
         executorService
                 .scheduleAtFixedRate(
                         () -> {
-                            while (running.get()) {
+                            if (running.get()) {
                                 try {
                                     final var pending = pgReplicationStream.readPending();
                                     if (pending != null) {
@@ -279,9 +276,8 @@ public final class PostgresqlClient implements CdcClient {
                                 } catch (Exception e) {
                                     log.error("Can not read event", e);
                                 }
-
                             }
-                        }, 0, 1000, TimeUnit.MILLISECONDS);
+                        }, 0, 250, TimeUnit.MILLISECONDS);
     }
 
     public static final class Builder {

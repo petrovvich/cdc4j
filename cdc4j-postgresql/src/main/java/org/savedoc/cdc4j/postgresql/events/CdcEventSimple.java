@@ -4,6 +4,7 @@ import org.savedoc.cdc4j.common.CdcEvent;
 import org.savedoc.cdc4j.common.CdcEventType;
 
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class CdcEventSimple implements CdcEvent {
     private final CdcEventType type;
@@ -44,5 +45,16 @@ public class CdcEventSimple implements CdcEvent {
     @Override
     public Map<String, String> getColumns() {
         return columns;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", CdcEventSimple.class.getSimpleName() + "[", "]")
+                .add("type=" + type)
+                .add("relationOId='" + relationOId + "'")
+                .add("tableName='" + tableName + "'")
+                .add("tableSchema='" + tableSchema + "'")
+                .add("columns=" + columns)
+                .toString();
     }
 }

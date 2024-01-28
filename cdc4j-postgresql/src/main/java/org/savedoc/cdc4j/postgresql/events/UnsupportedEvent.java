@@ -5,6 +5,7 @@ import org.savedoc.cdc4j.common.CdcEventType;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public final class UnsupportedEvent implements CdcEvent {
     @Override
@@ -30,5 +31,11 @@ public final class UnsupportedEvent implements CdcEvent {
     @Override
     public Map<String, String> getColumns() {
         return Collections.emptyMap();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", UnsupportedEvent.class.getSimpleName() + "[", "]")
+                .toString();
     }
 }
