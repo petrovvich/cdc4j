@@ -13,10 +13,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      #      - name: Configure Git user
-      #        run: |
-      #          git config user.email "actions@github.com"
-      #          git config user.name "GitHub Actions"
+      - name: Configure Git user
+        run: |
+          git config user.email "alexromantrue@gmail.com"
+          git config user.name "petrovvich"
       - name: Publish package
         run: mvn -P github -B release:prepare release:perform
         env:
