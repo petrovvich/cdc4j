@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.22-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -33,13 +32,14 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git://github.com:save-doc/cdc4j.git</connection>
-        <developerConnection>scm:git:ssh://github.com:save-doc/cdc4j.git</developerConnection>
-        <url>https://github.com/save-doc/cdc4j/tree/master</url>
+        <developerConnection>scm:git:https://github.com/${git.repository}.git</developerConnection>
+        <tag>cdc4j-parent-0.0.14</tag>
+        <url>https://github.com/petrovvich/cdc4j/tree/master</url>
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.2</cdc4j.version>
+        <cdc4j.version>0.0.22-SNAPSHOT</cdc4j.version>
+        <git.repository>petrovvich/cdc4j</git.repository>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
@@ -112,6 +112,7 @@
     </dependencies>
 
     <build>
+        <finalName>cdc4j</finalName>
         <plugins>
             <plugin>
                 <groupId>com.github.ekryd.sortpom</groupId>
@@ -159,7 +160,27 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/petrovvich/cdc4j</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
