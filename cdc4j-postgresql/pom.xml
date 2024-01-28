@@ -20,4 +20,8 @@
             <artifactId>cdc4j-common</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
 </project>
