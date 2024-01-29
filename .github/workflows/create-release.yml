@@ -20,10 +20,6 @@ jobs:
       - name: Set the release version
         run: |
           echo "RELEASE_VERSION=v$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | awk -F '-' '{print $1}')" >> $GITHUB_ENV
-      - name: Publish package
-        run: mvn -P github -B release:prepare release:perform
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.1.4
@@ -34,3 +30,7 @@ jobs:
           release_name: Release ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
+      - name: Publish package
+        run: mvn -P github -B release:prepare release:perform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
