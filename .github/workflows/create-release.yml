@@ -34,3 +34,12 @@ jobs:
           release_name: Release ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
+      - name: upload postgresql artifact
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./cdc4j-postgresql/target/cdc4j-postgresql.jar
+          asset_name: cdc4j-postgresql.jar
+          asset_content_type: application/java-archive
