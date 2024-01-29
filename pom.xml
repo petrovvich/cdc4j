@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.24</version>
+    <version>0.0.25-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -38,7 +38,7 @@
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.24</cdc4j.version>
+        <cdc4j.version>0.0.25-SNAPSHOT</cdc4j.version>
         <git.repository>petrovvich/cdc4j</git.repository>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
