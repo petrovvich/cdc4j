@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "RELEASE_VERSION=v$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | awk -F '-' '{print $1}')" >> $GITHUB_ENV
       - name: Publish package
-        run: mvn -P github -B release:prepare && mvn --batch-mode deploy && mvn -P github -B release:perform
+        run: mvn -P github -B release:prepare && mvn --batch-mode -P github deploy && mvn -P github -B release:perform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
