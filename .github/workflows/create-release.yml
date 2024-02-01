@@ -6,7 +6,7 @@ on:
       - issue/6
 
 jobs:
-  publish-github:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
@@ -24,10 +24,26 @@ jobs:
       - name: Set the release version
         run: |
           echo "RELEASE_VERSION=v$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | awk -F '-' '{print $1}')" >> $GITHUB_ENV
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
+        with:
+          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Publish package
-        run: mvn -P github,maven-central -B release:prepare release:perform
+        run: |
+          mvn -B -U \
+            -P github,maven-central \
+            release:prepare \
+            release:perform \
+            javadoc:jar \
+            source:jar \
+            -s settings.xml \
+            -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
+            deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.1.4
@@ -47,22 +63,3 @@ jobs:
           asset_path: ./cdc4j-postgresql/target/cdc4j-postgresql.jar
           asset_name: cdc4j-postgresql.jar
           asset_content_type: application/java-archive
-      - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v6.1.0
-        with:
-          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-      - name: Release With Maven
-        run: |
-          mvn -B -U \
-            -P maven-central \
-            release:prepare \
-            release:perform \
-            javadoc:jar \
-            source:jar \
-            -s settings.xml \
-            -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
-            deploy
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
