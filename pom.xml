@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.30-SNAPSHOT</version>
+    <version>0.0.30</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -32,14 +32,14 @@
     </modules>
 
     <scm>
-        <url>https://github.com/${git.repository}.git</url>
         <connection>scm:git:https://github.com/${git.repository}.git</connection>
         <developerConnection>scm:git:https://github.com/${git.repository}.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.30</tag>
+        <url>https://github.com/${git.repository}.git</url>
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.30-SNAPSHOT</cdc4j.version>
+        <cdc4j.version>0.0.30</cdc4j.version>
         <git.repository>petrovvich/cdc4j</git.repository>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
@@ -209,15 +209,15 @@
         </profile>
         <profile>
             <id>maven-central</id>
-            <properties>
-                <gpg.executable>gpg2</gpg.executable>
-            </properties>
             <distributionManagement>
                 <repository>
                     <id>ossrh</id>
                     <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
+            <properties>
+                <gpg.executable>gpg2</gpg.executable>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
