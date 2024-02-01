@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.29-SNAPSHOT</version>
+    <version>0.0.29</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -33,12 +33,12 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/${git.repository}.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v0.0.29</tag>
         <url>https://github.com/petrovvich/cdc4j/tree/master</url>
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.29-SNAPSHOT</cdc4j.version>
+        <cdc4j.version>0.0.29</cdc4j.version>
         <git.repository>petrovvich/cdc4j</git.repository>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
