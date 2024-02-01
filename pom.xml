@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.savedoc.cdc4j</groupId>
     <artifactId>cdc4j-parent</artifactId>
-    <version>0.0.31-SNAPSHOT</version>
+    <version>0.0.32-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
@@ -41,7 +40,7 @@
     </scm>
 
     <properties>
-        <cdc4j.version>0.0.31-SNAPSHOT</cdc4j.version>
+        <cdc4j.version>0.0.32-SNAPSHOT</cdc4j.version>
         <git.repository>petrovvich/cdc4j</git.repository>
         <junit.version>5.10.1</junit.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
@@ -212,14 +211,14 @@
         <profile>
             <id>maven-central</id>
             <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
                 <repository>
                     <id>ossrh</id>
                     <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
             </distributionManagement>
             <properties>
                 <gpg.executable>gpg2</gpg.executable>
