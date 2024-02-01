@@ -3,9 +3,10 @@ on:
   push:
     branches:
       - main
+      - issue/6
 
 jobs:
-  publish:
+  publish-github:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
@@ -13,6 +14,9 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          java-package: 'jdk'
+          cache: 'maven'
+          server-id: ossrh
       - name: Configure Git user
         run: |
           git config user.email "alexromantrue@gmail.com"
@@ -21,7 +25,7 @@ jobs:
         run: |
           echo "RELEASE_VERSION=v$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | awk -F '-' '{print $1}')" >> $GITHUB_ENV
       - name: Publish package
-        run: mvn -P github -B release:prepare release:perform
+        run: mvn -P github,maven-central -B release:prepare release:perform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
@@ -43,3 +47,22 @@ jobs:
           asset_path: ./cdc4j-postgresql/target/cdc4j-postgresql.jar
           asset_name: cdc4j-postgresql.jar
           asset_content_type: application/java-archive
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
+        with:
+          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      - name: Release With Maven
+        run: |
+          mvn -B -U \
+            -P maven-central \
+            release:prepare \
+            release:perform \
+            javadoc:jar \
+            source:jar \
+            -s settings.xml \
+            -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
+            deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
