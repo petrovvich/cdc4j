@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <name>cdc4j-parent</name>
     <description>Change data capture library for Java</description>
+    <url>https://github.com/${git.repository}</url>
 
     <licenses>
         <license>
