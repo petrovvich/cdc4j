@@ -31,7 +31,7 @@ jobs:
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Publish package
         run: |
-          mvn -B -U \
+          mvn -e -X -B -U \
           -P github,maven-central \
           release:prepare \
           release:perform \
