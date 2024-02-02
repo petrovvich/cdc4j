@@ -13,6 +13,9 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+          java-package: 'jdk'
+          cache: 'maven'
+          server-id: ossrh
       - name: Configure Git user
         run: |
           git config user.email "alexromantrue@gmail.com"
@@ -20,10 +23,24 @@ jobs:
       - name: Set the release version
         run: |
           echo "RELEASE_VERSION=v$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec | awk -F '-' '{print $1}')" >> $GITHUB_ENV
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
+        with:
+          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Publish package
-        run: mvn -P github -B release:prepare release:perform
+        run: |
+          mvn -e -X -B -U \
+          -Pgithub,maven-central \
+          release:prepare \
+          release:perform \
+          deploy \
+          -s settings.xml \
+          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.1.4
