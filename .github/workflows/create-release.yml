@@ -32,12 +32,12 @@ jobs:
       - name: Publish package
         run: |
           mvn -e -X -B -U \
-          -P github,maven-central \
+          -Pgithub,maven-central \
           release:prepare \
           release:perform \
+          deploy \
           -s settings.xml \
-          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \ 
-          deploy
+          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
